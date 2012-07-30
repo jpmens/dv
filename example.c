@@ -19,6 +19,16 @@ int main(int argc, char **argv)
 	dvset_resolvconf("./resolv.conf");
 	/* dvset_bits(~DV_FORCE_AD); */ /* Disable DNSSEC check */
 
+#if TESTSELF
+	dvi = dv_alloc(argv[0]);
+	rc = dv_valid(dvi);
+	if (rc != F_SIG_OK) {
+		fprintf(stderr, "Program file %s has been modified. ABORT\n", *argv);
+		exit(2);
+	}
+	dv_free(dvi);
+#endif
+
 	filename = argv[1];
 
 	dvi = dv_alloc(filename);
