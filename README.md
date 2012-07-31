@@ -1,6 +1,6 @@
 # DV - Verify file hashes in the DNS
 
-An experiment.
+An experiment. [Read more](http://jpmens.net/2012/07/31/lightweight-file-signing-with-dns/).
 
 ## Examples
 
