@@ -26,5 +26,5 @@ def hashfile(filename):
 if __name__ == "__main__":
 
     for file in sys.argv[1:]:
-        print "%s.%s %d IN  TXT \"%s\"" % (hashfile(file), DNS_RHS, DNS_TTL, file)
+        print "%s.%s. %d IN  TXT \"%s\"" % (hashfile(file), DNS_RHS, DNS_TTL, file)
 
