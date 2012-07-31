@@ -45,3 +45,10 @@ An experiment.
 	$ ./example reference.file
 	Program file ./example has been modified. ABORT
 
+## Requires
+
+* [ldns](http://www.nlnetlabs.nl/projects/ldns/)
+
+## Credits
+
+* Uses "SHA-1 in C", by Steve Reid (Public Domain)
