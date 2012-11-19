@@ -31,16 +31,16 @@
 #include <sys/stat.h>
 #include <stdint.h>
 #include "githash.h"
-#include "sha1.h"
+#include <ldns/ldns.h>
 
 #define BLEN	5120
 
-static void digest_to_hex(const uint8_t digest[SHA1_DIGEST_SIZE], char *output)
+static void digest_to_hex(const uint8_t digest[LDNS_SHA1_DIGEST_LENGTH], char *output)
 {
 	int             i, j;
 	char           *c = output;
 
-	for (i = 0; i < SHA1_DIGEST_SIZE / 4; i++) {
+	for (i = 0; i < LDNS_SHA1_DIGEST_LENGTH / 4; i++) {
 		for (j = 0; j < 4; j++) {
 			sprintf(c, "%02x", digest[i * 4 + j]);
 			c += 2;
@@ -56,8 +56,8 @@ int githash_file(char *filename, char *digest_out)
 {
 	int             fd, n;
 	unsigned char   buf[BLEN], header[128];
-	unsigned char   digest[SHA1_DIGEST_SIZE];
-	SHA1_CTX        sha;
+	unsigned char   digest[LDNS_SHA1_DIGEST_LENGTH];
+	ldns_sha1_ctx	sha;
 	struct stat     sb;
 
 
@@ -79,14 +79,14 @@ int githash_file(char *filename, char *digest_out)
 	 */
 
 	memset(header, 0, sizeof(header));		/* Ensure contains trailing '\0' */
-	SHA1_Init(&sha);
-	sprintf((char *)header, "blob %llu", sb.st_size);
-	SHA1_Update(&sha, (uint8_t *) header, strlen((char *)header) + 1);
+	ldns_sha1_init (&sha);
+	sprintf((char *)header, "blob %lu", sb.st_size);
+	ldns_sha1_update (&sha, (uint8_t *) header, strlen((char *)header) + 1);
 
 	while ((n = read(fd, buf, sizeof(buf))) > 0) {
-		SHA1_Update(&sha, (uint8_t *) buf, n);
+		ldns_sha1_update (&sha, (uint8_t *) buf, n);
 	}
-	SHA1_Final(&sha, (uint8_t *) digest);
+	ldns_sha1_final ((uint8_t *) digest, &sha);
 
 	close(fd);
 
